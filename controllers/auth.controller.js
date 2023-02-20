@@ -6,7 +6,7 @@ const { Conflict, Unauthorized } = require('http-errors');
 
 const { User } = require('../models/user');
 const { sendMailNodemailer } = require('../helpers/index');
-const { JWT_SECRET } = process.env;
+const { JWT_SECRET, REFRESH_JWT_SECRET } = process.env;
 const PORT = process.env.PORT || 3000;
 
 async function register(req, res, next) {
@@ -99,11 +99,15 @@ async function login(req, res, next) {
   }
   const payload = { id: storedUser._id };
   const token = jwt.sign(payload, JWT_SECRET, {
-    expiresIn: '1h', // examples: "1m", "1s",
+    expiresIn: '2m', // examples: "1h", "1m", "1s",
   });
+    const refreshToken = jwt.sign(payload, REFRESH_JWT_SECRET, {
+      expiresIn: '7D', // examples: "1h", "1m", "1s",
+    });
   return res.status(200).json({
     data: {
       token,
+      refreshToken,
       user: {
         email,
         id: storedUser._id,

@@ -39,6 +39,10 @@ const schema = mongoose.Schema(
       type: String,
       required: [true, 'Verify token is required'], // ask mentor
     },
+    refreshToken: {
+      type: String,
+      required: [true, 'Refresh token is required'], // add new token
+    },
   },
   {
     versionKey: false,
